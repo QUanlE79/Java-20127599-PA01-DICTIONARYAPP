@@ -136,9 +136,14 @@ public class SlangDictionary {
         addDefinition(definition, word);
     }
 
+    public void duplicateSlangWord(String word, String definition) {
+        this.valuesOfWord.get(word).add(definition);
+        addDefinition(definition, word);
+    }
+
     public void editSlangWord(String k, String replace){
         ArrayList<String> tmp = this.valuesOfWord.remove(k);
-        this.valuesOfDefinition.put(replace, tmp);
+        this.valuesOfWord.put(replace, tmp);
         for(String i: tmp){
             this.valuesOfDefinition.get(i).remove(k);
             this.valuesOfDefinition.get(i).add(replace);

@@ -12,16 +12,16 @@ import java.util.Random;
 public class SlangDictionary {
     private HashMap<String, ArrayList<String>> valuesOfWord;
     private HashMap<String, ArrayList<String>> valuesOfDefinition;
-    private Map<String, String> history;
+    private ArrayList<String> history;
 
     public SlangDictionary() {
         this.valuesOfWord = new HashMap<String, ArrayList<String>>();
         this.valuesOfDefinition = new HashMap<String, ArrayList<String>>();
-        this.history = new HashMap<String, String>();
+        this.history = new ArrayList<String>();
     }
 
     public SlangDictionary(HashMap<String, ArrayList<String>> valuesOfWord,
-            HashMap<String, ArrayList<String>> valuesOfDefinition, Map<String, String> history) {
+            HashMap<String, ArrayList<String>> valuesOfDefinition, ArrayList<String> history) {
         this.valuesOfWord = valuesOfWord;
         this.valuesOfDefinition = valuesOfDefinition;
         this.history = history;
@@ -35,7 +35,7 @@ public class SlangDictionary {
         this.valuesOfDefinition = valuesOfDefinition;
     }
 
-    public void setHistory(Map<String, String> history) {
+    public void setHistory(ArrayList<String> history) {
         this.history = history;
     }
 
@@ -47,7 +47,7 @@ public class SlangDictionary {
         return this.valuesOfDefinition;
     }
 
-    public Map<String, String> getHistory() {
+    public ArrayList<String> getHistory() {
         return history;
     }
 
@@ -55,9 +55,10 @@ public class SlangDictionary {
         try {
             File fi = new File(filename);
             Scanner sc = new Scanner(fi);
+            this.history.clear();
             while (sc.hasNextLine()) {
-                String data[] = sc.nextLine().split("`");
-                this.history.put(data[0], data[1]);
+                String data = sc.nextLine();
+                this.history.add(data);
             }
             sc.close();
         } catch (Exception e) {
@@ -65,11 +66,11 @@ public class SlangDictionary {
         }
     }
 
-    public void saveHistory(String filename){
+    public void saveHistory(String filename) {
         try {
             FileWriter fo = new FileWriter(filename);
-            for (String i: this.history.keySet()){
-                fo.write(i + "`" + this.history.get(i)+"\n");
+            for (String i : this.history) {
+                fo.write(i + "\n");
             }
             fo.close();
         } catch (Exception e) {
@@ -119,11 +120,10 @@ public class SlangDictionary {
         return defs;
     }
 
-    public Map<String,ArrayList<String>> searchByWord(String k){
-        Map<String,ArrayList<String>> res = new HashMap<String,ArrayList<String>>();
-        String pattern = k + "[ -~]+";
-        for(String i: this.valuesOfWord.keySet()){
-            if (i.matches(pattern) || i.matches(k)){
+    public Map<String, ArrayList<String>> searchByWord(String k) {
+        Map<String, ArrayList<String>> res = new HashMap<String, ArrayList<String>>();
+        for (String i : this.valuesOfWord.keySet()) {
+            if (i.contains(k)) {
                 res.put(i, this.searchDefinitionByKey(i));
             }
         }
@@ -141,23 +141,41 @@ public class SlangDictionary {
         return words;
     }
 
-    public Map<String,ArrayList<String>> searchByDefinition(String k){
-        Map<String,ArrayList<String>> res = new HashMap<String,ArrayList<String>>();
-        String pattern = k + "[ -~]+";
-        for(String i: this.valuesOfDefinition.keySet()){
-            if (i.matches(pattern) || i.matches(k)){
+    public Map<String, ArrayList<String>> searchByDefinition(String k) {
+        Map<String, ArrayList<String>> res = new HashMap<String, ArrayList<String>>();
+       
+       
+        for (String i : this.valuesOfDefinition.keySet()) {
+            if (i.contains(k)) {
                 res.put(i, this.searchSlangWordByKey(i));
             }
         }
         return res;
     }
-    
 
     // Add a slang word which searched before to history
     public void addListHisory(String k, String date) {
-        this.history.put(k, date);
+        for (String i: this.history){
+            if (i.contains(k)){
+                if (i.substring(24) == k){
+                    System.out.println(i.substring(24));
+                this.history.remove(i);
+                this.history.add(0, date + "     " +k);
+                return;
+                }
+            }
+        }
+        this.history.add(0, date + "     " +k);
     }
-
+    public void clearHistory(String filename){
+        try {
+            FileWriter fo = new FileWriter(filename);
+            fo.write("");
+            fo.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     private void addDefinition(String definition, String word) {
         if (this.valuesOfDefinition.containsKey(definition)) {
             this.valuesOfDefinition.get(definition).add(word);
@@ -214,14 +232,14 @@ public class SlangDictionary {
         }
     }
 
-    public void resetSlangWord(String filename){
+    public void resetSlangWord(String filename) {
         loadData(filename);
     }
 
-    public void saveDictionary(String filename){
+    public void saveDictionary(String filename) {
         try {
-            FileWriter fo = new FileWriter(filename,false);
-            for (String i: this.valuesOfWord.keySet()){
+            FileWriter fo = new FileWriter(filename, false);
+            for (String i : this.valuesOfWord.keySet()) {
                 String item = String.join("| ", this.valuesOfWord.get(i));
                 fo.write(i + "`" + item + "\n");
             }
@@ -229,7 +247,6 @@ public class SlangDictionary {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
 
     }
 
@@ -285,6 +302,22 @@ public class SlangDictionary {
         }
         Collections.shuffle(res);
         res.add(0, def);
+        return res;
+    }
+
+    public String listWord() {
+        String res = "";
+        for (String i : this.valuesOfWord.keySet()) {
+            res += i + ": " + String.join(", ", this.valuesOfWord.get(i)) + "\n";
+        }
+        return res;
+    }
+
+    public String listDef() {
+        String res = "";
+        for (String i : this.valuesOfDefinition.keySet()) {
+            res += i + ": " + String.join(", ", this.valuesOfDefinition.get(i)) + "\n";
+        }
         return res;
     }
 }

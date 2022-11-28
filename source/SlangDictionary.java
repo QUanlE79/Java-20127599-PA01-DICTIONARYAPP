@@ -1,25 +1,27 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.Random;
 
 public class SlangDictionary {
     private HashMap<String, ArrayList<String>> valuesOfWord;
     private HashMap<String, ArrayList<String>> valuesOfDefinition;
-    private ArrayList<String> history;
+    private Map<String, String> history;
 
     public SlangDictionary() {
         this.valuesOfWord = new HashMap<String, ArrayList<String>>();
         this.valuesOfDefinition = new HashMap<String, ArrayList<String>>();
-        this.history = new ArrayList<String>();
+        this.history = new HashMap<String, String>();
     }
 
     public SlangDictionary(HashMap<String, ArrayList<String>> valuesOfWord,
-            HashMap<String, ArrayList<String>> valuesOfDefinition, ArrayList<String> history) {
+            HashMap<String, ArrayList<String>> valuesOfDefinition, Map<String, String> history) {
         this.valuesOfWord = valuesOfWord;
         this.valuesOfDefinition = valuesOfDefinition;
         this.history = history;
@@ -33,7 +35,7 @@ public class SlangDictionary {
         this.valuesOfDefinition = valuesOfDefinition;
     }
 
-    public void setHistory(ArrayList<String> history) {
+    public void setHistory(Map<String, String> history) {
         this.history = history;
     }
 
@@ -45,8 +47,34 @@ public class SlangDictionary {
         return this.valuesOfDefinition;
     }
 
-    public ArrayList<String> getHistory() {
+    public Map<String, String> getHistory() {
         return history;
+    }
+
+    public void loadHistory(String filename) {
+        try {
+            File fi = new File(filename);
+            Scanner sc = new Scanner(fi);
+            while (sc.hasNextLine()) {
+                String data[] = sc.nextLine().split("`");
+                this.history.put(data[0], data[1]);
+            }
+            sc.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveHistory(String filename){
+        try {
+            FileWriter fo = new FileWriter(filename);
+            for (String i: this.history.keySet()){
+                fo.write(i + "`" + this.history.get(i)+"\n");
+            }
+            fo.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // Load data from file and store to structure class SlangDictionary
@@ -82,7 +110,7 @@ public class SlangDictionary {
 
     // Search with slang word: return an array list which have all the definition of
     // the k
-    public ArrayList<String> searchDefinitionByKey(String k) {
+    private ArrayList<String> searchDefinitionByKey(String k) {
         if (this.valuesOfWord.get(k) == null)
             return null;
         ArrayList<String> defs = this.valuesOfWord.get(k);
@@ -91,9 +119,20 @@ public class SlangDictionary {
         return defs;
     }
 
+    public Map<String,ArrayList<String>> searchByWord(String k){
+        Map<String,ArrayList<String>> res = new HashMap<String,ArrayList<String>>();
+        String pattern = k + "[ -~]+";
+        for(String i: this.valuesOfWord.keySet()){
+            if (i.matches(pattern) || i.matches(k)){
+                res.put(i, this.searchDefinitionByKey(i));
+            }
+        }
+        return res;
+    }
+
     // Search with definition: return an array list which have all the slang words
     // have the definition k
-    public ArrayList<String> searchSlangWordByKey(String k) {
+    private ArrayList<String> searchSlangWordByKey(String k) {
         if (this.valuesOfDefinition.get(k) == null)
             return null;
         ArrayList<String> words = this.valuesOfDefinition.get(k);
@@ -102,12 +141,24 @@ public class SlangDictionary {
         return words;
     }
 
+    public Map<String,ArrayList<String>> searchByDefinition(String k){
+        Map<String,ArrayList<String>> res = new HashMap<String,ArrayList<String>>();
+        String pattern = k + "[ -~]+";
+        for(String i: this.valuesOfDefinition.keySet()){
+            if (i.matches(pattern) || i.matches(k)){
+                res.put(i, this.searchSlangWordByKey(i));
+            }
+        }
+        return res;
+    }
+    
+
     // Add a slang word which searched before to history
-    public void addListHisory(String k) {
-        this.history.add(k);
+    public void addListHisory(String k, String date) {
+        this.history.put(k, date);
     }
 
-    public void addDefinition(String definition, String word) {
+    private void addDefinition(String definition, String word) {
         if (this.valuesOfDefinition.containsKey(definition)) {
             this.valuesOfDefinition.get(definition).add(word);
         } else {
@@ -117,7 +168,7 @@ public class SlangDictionary {
         }
     }
 
-    public void addSlangWord(String word, String definition) {
+    private void addSlangWord(String word, String definition) {
         ArrayList<String> def = new ArrayList<String>();
         def.add(definition);
         this.valuesOfWord.put(word, def);
@@ -163,6 +214,25 @@ public class SlangDictionary {
         }
     }
 
+    public void resetSlangWord(String filename){
+        loadData(filename);
+    }
+
+    public void saveDictionary(String filename){
+        try {
+            FileWriter fo = new FileWriter(filename,false);
+            for (String i: this.valuesOfWord.keySet()){
+                String item = String.join("| ", this.valuesOfWord.get(i));
+                fo.write(i + "`" + item + "\n");
+            }
+            fo.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+
+    }
+
     // Random a slang word on dictionary: return a string definition
     public String randomSlangWord() {
         Object slangWord = this.valuesOfWord.keySet().toArray()[new Random()
@@ -171,7 +241,7 @@ public class SlangDictionary {
     }
 
     // Random a definition on dictionary: return a string definition
-    public String randomDefinition() {
+    private String randomDefinition() {
         Object def = this.valuesOfDefinition.keySet().toArray()[new Random()
                 .nextInt(this.valuesOfDefinition.keySet().toArray().length)];
         return def.toString();

@@ -129,6 +129,7 @@ public class deleteWordGUI implements ActionListener {
 
             p.add(Box.createRigidArea(new Dimension(10, 40)));
             f.setFont(font);
+            
             p.add(f);
 
             JButton ok = new JButton("OK");

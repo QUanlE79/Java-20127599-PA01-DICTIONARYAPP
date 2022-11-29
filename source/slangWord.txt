@@ -25,7 +25,6 @@ BBV`Brags Beats and Variance
 BBY`Baby
 BBZ`Babes
 SDK`Software Development Kit
-!`chamthan
 BCD`Behind Closed Doors
 BCC`Blind Carbon Copy
 $`Dollar| money
@@ -36,7 +35,6 @@ BCG`Birth Control Glasses
 GTBOSH`Glad To Be Of Some Help
 *`Indicating a spelling correction
 SEC`Second
-1`One
 2`To
 SCNR`Sorry, Could Not Resist
 BCS`Bowl Championship Series
@@ -1017,7 +1015,6 @@ TWU`That's What's Up
 IYGM`If You Get Me
 NFSW`Not For Showing Wife
 CLAPPED`Shot
-21`haimot
 CVV`Card Verification Value
 RBAU`Right Back At You
 EYEBALL`Look at| Estimate measurement by looking
@@ -1036,7 +1033,6 @@ MTUK`More Than You Know
 BTTF`Back To The Future
 TYB`Try Your Best
 SEEN`I see, understood
-32`bahai
 CWT`Hundred Weight, 100lbs
 2U`To You
 LUVVIE`Stage actor
@@ -1073,7 +1069,6 @@ L8R G8R`Later Gator
 LQTM`Laughing Quietly To Myself
 (YN)`Fingers crossed (MSN)
 CYT`See You Tomorrow
-54`namhai
 4U`For You
 M33T`Meet
 KNOT`Roll of paper money
@@ -1363,7 +1358,6 @@ BT`BitTorrent| British Telecom
 BU`Backup
 DHV`Demonstration of Higher Value
 BV`Bad Vibe
-1234`mothaibabon
 C:`Very happy
 BUEY`similar to DUDE
 FIZZLE`Fool
@@ -5955,7 +5949,6 @@ YARLY`Yeah Really
 SPIM`Instant Messaging SPAM
 KYSO`Knock Yourself Out
 ROTGL`Rolling On The Ground Laughing
-___`gach
 ^~^`Mischievous Smile
 DUBS`Twenty inch wheels
 MOOLAH`Money
@@ -7144,6 +7137,7 @@ S&M`Sadism and Masochism
 REP`Represent| Reputation| Repetition
 S&P`Salt and Pepper
 REQ`Request| Required
+ADD`Attention Deficit Disorder
 RES`Resin
 REV`Make an engine go faster| Reverend
 BRBK`BRB
@@ -7388,7 +7382,6 @@ RSA`An encryption algorithm
 B2W`Back To Work
 RSI`Repetitive Strain Injury
 RSN`Real Soon Now
-123`mothaiba
 ARD`Alright
 RSS`Rich Site Summary| Really Simple Syndication
 S4S`Support For Support

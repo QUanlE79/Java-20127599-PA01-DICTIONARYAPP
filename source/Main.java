@@ -9,15 +9,16 @@ public class Main {
 
         MainGUI.gui(frame.getContentPane(), sd);
 
-        frame.setSize(1123, 576);
+
+        frame.setSize(1170, 576);
         frame.setVisible(true);
     }
 
     public static void main(String[] args) {
         try {
-            SlangDictionary sd = new SlangDictionary();
-            sd.loadData(EnvVariable.CURRENT_SLANG_WORD_FILE_NAME);
-            createAndShowGUI(sd);
+            EnvVariable.sd = new SlangDictionary();
+            EnvVariable.sd.loadData(EnvVariable.CURRENT_SLANG_WORD_FILE_NAME);
+            createAndShowGUI(EnvVariable.sd);
         } catch (Exception e) {
             e.printStackTrace();
         }

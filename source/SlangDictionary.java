@@ -83,6 +83,8 @@ public class SlangDictionary {
         try {
             File fi = new File(fileName);
             Scanner myReader = new Scanner(fi);
+            this.valuesOfDefinition.clear();;
+            this.valuesOfWord.clear();
             while (myReader.hasNextLine()) {
 
                 String[] data = myReader.nextLine().split("`");
@@ -232,8 +234,11 @@ public class SlangDictionary {
         }
     }
 
-    public void resetSlangWord(String filename) {
-        loadData(filename);
+    public void resetSlangWord() {
+        SlangDictionary root = new SlangDictionary();
+        root.loadData(EnvVariable.ROOT_SLANG_WORD_FILE_NAME);
+        root.saveDictionary(EnvVariable.CURRENT_SLANG_WORD_FILE_NAME);
+        this.loadData(EnvVariable.CURRENT_SLANG_WORD_FILE_NAME);
     }
 
     public void saveDictionary(String filename) {
